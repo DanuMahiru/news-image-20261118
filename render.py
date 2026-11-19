@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render v2 of the 18 November 2026 front page: 42 verified stories,
+"""Render v3 of the 18 November 2026 front page: 48 verified stories,
 7 regions, UTC timeline, proof tags, world map, date check.
 All art drawn programmatically with Pillow. No external assets.
 Own design and wording; layout follows the proven dense-front-page form."""
@@ -91,7 +91,7 @@ def burst(cx, cy, r=7, color=RED):
 
 # ---------------- top line ----------------
 d.text((M, 8), "THE WORLD'S NEWS OF ONE DAY, ON ONE PAGE", font=sans_b(11), fill=RED)
-d.text((W - M, 8), "42 STORIES  \u2022  7 REGIONS  \u2022  9 FIELDS  \u2022  16 DRAWN", font=sans_b(11), fill=INK, anchor="ra")
+d.text((W - M, 8), "48 STORIES  \u2022  7 REGIONS  \u2022  9 FIELDS  \u2022  16 DRAWN", font=sans_b(11), fill=INK, anchor="ra")
 rule(24)
 
 # ---------------- masthead ----------------
@@ -99,11 +99,11 @@ center(28, "Wednesday 18 November 2026", serif_b(52))
 rule(86)
 
 # ---------------- region bar (segments + legend line) ----------------
-REGIONS = [("ASIA", 10, RED), ("EUROPE", 6, BLUE), ("AMERICAS", 13, TEAL),
-           ("MIDDLE EAST", 4, DARKRED), ("GLOBAL", 6, PURPLE), ("AFRICA", 1, GREEN),
-           ("OCEANIA", 2, ORANGE)]
+REGIONS = [("ASIA", 10, RED), ("EUROPE", 8, BLUE), ("AMERICAS", 13, TEAL),
+           ("MIDDLE EAST", 5, DARKRED), ("GLOBAL", 7, PURPLE), ("AFRICA", 2, GREEN),
+           ("OCEANIA", 3, ORANGE)]
 x = M
-tot = 42
+tot = 48
 for name, n, color in REGIONS:
     w = CW * n / tot
     d.rectangle([x, 92, x + w - 1, 106], fill=color)
@@ -114,7 +114,7 @@ for name, n, color in REGIONS:
     d.text((rx + 11, 110), f"{name} {n}", font=sans_b(10), fill=INK)
     rx += 11 + d.textlength(f"{name} {n}", font=sans_b(10)) + 12
 d.text((M, 124), "BY FIELD", font=sans_b(10), fill=RED)
-d.text((M + 62, 124), "Diplomacy 4   War & security 9   Economy & markets 12   Politics & courts 2   Culture & sport 5   Business & tech 3   Labour & society 3   Climate & disasters 3   Science & space 1", font=sans(10), fill=INK)
+d.text((M + 62, 124), "Diplomacy 4   War & security 11   Economy & markets 13   Politics & courts 2   Culture & sport 5   Business & tech 4   Labour & society 4   Climate & disasters 3   Science & space 2", font=sans(10), fill=INK)
 rule(138)
 
 # ---------------- UTC timeline ----------------
@@ -295,12 +295,12 @@ def draw_factory(x0, y0, x1, y1):
 def draw_senate(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=(255, 255, 255), outline=INK, width=1)
     d.text((x0 + 6, y0 + 4), "DEM", font=sans_b(9), fill=INK)
-    d.rectangle([x0 + 34, y0 + 4, x0 + 34 + 84, y0 + 16], fill=MIDBLUE)
-    d.text((x0 + 122, y0 + 3), "56", font=sans_b(11), fill=INK)
+    d.rectangle([x0 + 34, y0 + 4, x0 + 34 + 96, y0 + 16], fill=MIDBLUE)
+    d.text((x0 + 134, y0 + 3), "251", font=sans_b(11), fill=INK)
     d.text((x0 + 6, y0 + 22), "REP", font=sans_b(9), fill=INK)
-    d.rectangle([x0 + 34, y0 + 22, x0 + 34 + 66, y0 + 34], fill=(178, 34, 52))
-    d.text((x0 + 104, y0 + 21), "44", font=sans_b(11), fill=INK)
-    d.text((x0 + 6, y1 - 14), "SENATE SPLIT", font=sans_b(9), fill=INK)
+    d.rectangle([x0 + 34, y0 + 22, x0 + 34 + 12, y0 + 34], fill=(178, 34, 52))
+    d.text((x0 + 50, y0 + 21), "11", font=sans_b(11), fill=INK)
+    d.text((x0 + 6, y1 - 14), "HOUSE VOTE", font=sans_b(9), fill=INK)
 
 def draw_chip(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=(20, 30, 50), outline=INK, width=1)
@@ -313,22 +313,22 @@ def draw_chip(x0, y0, x1, y1):
 
 MIDS = [
     ("5  MIDDLE EAST \u2014 GAZA", "Israel makes first ground push in central Gaza since truce",
-     "Tanks cross the Yellow Line near Nuseirat; Hamas calls it a breach of the truce.",
+     "Tanks cross the Yellow Line; Hamas calls it a breach.",
      "CONFIRMED: AL JAZEERA, BBC", draw_gaza),
     ("6  AFRICA \u2014 HORN", "Ethiopia and Eritrea mass troops on their border",
      "Within striking distance, monitors say; Eritrea calls it propaganda.",
      "SOURCES: REUTERS", draw_horn),
     ("7  AMERICAS \u2014 MARKETS", "Fed minutes point to more rate rises; Dow drops 561",
-     "Nearly all officials expect hikes. The Dow loses 1.1%; Nasdaq +0.4%.",
+     "Officials expect more hikes; Dow \u22121.1%, Nasdaq +0.4%.",
      "CONFIRMED: REUTERS", draw_fed),
     ("8  ASIA \u2014 LABOUR", "Bangladesh wage protests shut factories; tear gas fired",
-     "Workers walk out in Savar-Ashulia; about 30 factories halt. They want 30,000 taka.",
+     "Workers walk out in Savar-Ashulia; 30 factories halt.",
      "CONFIRMED: DAILY STAR", draw_factory),
     ("9  AMERICAS \u2014 US POLITICS", "House Democrats pick Jeffries for Speaker, 251\u201311",
      "The first Black nominee; the full House votes on 3 January.",
      "CONFIRMED: AP", draw_senate),
     ("10  AMERICAS \u2014 BUSINESS", "Anthropic prices IPO at $83; Nvidia tops forecasts",
-     "Anthropic prices above its $70\u201378 range. Nvidia\u2019s revenue more than doubles.",
+     "Anthropic prices above its range; Nvidia revenue doubles.",
      "CONFIRMED: REUTERS", draw_chip),
 ]
 for i, (kick, head, summ, t, drawfn) in enumerate(MIDS):
@@ -452,18 +452,18 @@ d.text((MAPX, MAPY + MAPH + 27), "not independently verified. SOURCES: monitors,
 BRIEFS = [
     ("Gold falls to $3,770, lowest since Sept 2025", PURPLE),
     ("Brent settles at $91.95 a barrel", PURPLE),
-    ("Nvidia revenue doubles to $115.8bn; shares \u22122.9%", TEAL),
+    ("Nvidia revenue doubles to $115.8bn", TEAL),
     ("Nasdaq +0.42% as the Dow falls 561", TEAL),
-    ("El Ni\u00f1o drought, fires persist in Amazon, Indonesia", TEAL),
+    ("El Ni\u00f1o drought, fires persist in Amazon", TEAL),
     ("Gopalganj: police station burned in unrest", RED),
-    ("Hasina unrest: troops out; blasts in 28 districts", RED),
+    ("Hasina unrest: troops out in 28 districts", RED),
     ("Dhoni retires from the IPL", RED),
-    ("Muse privacy flaws alarm Meta staff, chats show", PURPLE),
+    ("Muse privacy flaws alarm Meta staff", PURPLE),
     ("UnitedHealth falls 10%, biggest drag on Dow", TEAL),
     ("WTI crude down 3.2% to $83.26", TEAL),
     ("10-year Treasury yield eases to 5.07%", TEAL),
     ("Dollar hits a 19-month high", PURPLE),
-    ("Fed\u2019s Waller: half-point Dec hike may be needed", TEAL),
+    ("Waller: half-point Dec hike may be needed", TEAL),
     ("Markets put December hike odds near 95%", TEAL),
     ("S&P 500 falls for a fifth straight day", TEAL),
     ("EU: four states opt out of the Ukraine loan", BLUE),
@@ -473,20 +473,29 @@ BRIEFS = [
     ("Gaza: three killed in separate drone strikes", DARKRED),
     ("Wage board meets 23 Nov; new pay due in Dec", RED),
     ("About 30 factories shut in Savar-Ashulia", RED),
-    ("Akvan, named by Iran, is the third storm in a month", RED),
+    ("Akvan is the third storm in a month", RED),
     ("Ecca Vandal wins four ARIAs; Owusu shut out", ORANGE),
     ("Alcaraz meets Medvedev at the ATP Finals", BLUE),
+    ("Nyala market drone strike kills 21", GREEN),
+    ("Houthi strike on Riyadh airport kills 12", DARKRED),
+    ("NZ telco braces for 35 PB of GTA downloads", ORANGE),
+    ("France: students blockade schools in strikes", BLUE),
+    ("Dragon undocking stood down by weather", PURPLE),
+    ("ECB top jobs split: Spain, Germany, France", BLUE),
 ]
 BX0 = M + 316
-BCOLW = (W - M - BX0 - 8) // 2
-for col in range(2):
+BCOLW = (W - M - BX0 - 16) // 3
+for col in range(3):
     x = BX0 + col * (BCOLW + 8)
     y = BY + 24
-    for j in range(13):
-        text, color = BRIEFS[col * 13 + j]
+    for j in range(11):
+        idx = col * 11 + j
+        if idx >= len(BRIEFS):
+            break
+        text, color = BRIEFS[idx]
         d.ellipse([x, y + 2, x + 7, y + 9], fill=color)
-        d.text((x + 11, y), text, font=sans(10), fill=INK)
-        y += 12
+        d.text((x + 11, y), text, font=sans(9), fill=INK)
+        y += 11
 rule(BY + 190)
 
 # ---------------- date check ----------------
@@ -496,7 +505,7 @@ d.rectangle([M, DY, M + 78, DY + 14], fill=RED)
 d.text((M + 4, DY + 1), "DATE CHECK", font=sans_b(10), fill=(255, 255, 255))
 dc = ("Left out on purpose, because they were first reported before Wednesday: the US strike on Qeshm (Tue), "
       "the Crimean Bridge attack (Tue), India beating Pakistan 2\u20131 in the SAFF final (Tue), the Earthshot Prize "
-      "in Mumbai (Tue), the US losing measles elimination status (Tue). Not yet reported: the Trump\u2013Xi\u2013Putin "
+      "in Mumbai (Tue), the US losing measles elimination status (Tue), the Rugby League World Cup final, Australia 32\u201312 NZ (Sun). Not yet reported: the Trump\u2013Xi\u2013Putin "
       "summit, Anthropic\u2019s first trade and GTA VI\u2019s US release (Thu 19 Nov); Akvan\u2019s landfall (Fri 20 Nov).")
 y = DY
 for line in wrap(dc, sans(10), CW - 88):
@@ -508,5 +517,5 @@ rule(DY + 44)
 center(DY + 50, "Every story here happened or was first reported on Wednesday 18 November 2026; nothing older is shown as the day\u2019s news.", serif_b(12))
 center(DY + 68, "Sources: Reuters, AP, AFP, Al Jazeera, BBC, CNBC, NASA, ONS, ABC, ATP.  Original drawings.", sans(10), LIGHT)
 
-img.save("/home/hatch/workspace/makefun/work-news-image-v2/entry.png", optimize=True)
+img.save("/home/hatch/workspace/makefun/work-news-image-v3/entry.png", optimize=True)
 print("saved", img.size)
