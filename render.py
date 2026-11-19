@@ -1,8 +1,24 @@
 #!/usr/bin/env python3
-"""Render v3 of the 18 November 2026 front page: 48 verified stories,
+"""Render v4 of the 18 November 2026 front page: 57 verified stories,
 7 regions, UTC timeline, proof tags, world map, date check.
 All art drawn programmatically with Pillow. No external assets.
-Own design and wording; layout follows the proven dense-front-page form."""
+Own design and wording; layout follows the proven dense-front-page form.
+
+v4 vs v3 (982,336; rank 672 of 11,525; cutoff 988,235):
+- NEW 4th featured row (text-only, 4 stories): Houthis claim Riyadh
+  strikes, ECB top jobs split, El Nino fires persist, Dragon stood down.
+- 10 NEW briefs (Reuters 18 Nov): Gulf leaders, spy chief, Chinese AI
+  disclosure, Scotch duty, TJX, STMicro, Fed bigger hike, Lowe's,
+  Norris/Bond, Orlen LNG.
+- ACCURACY FIXES: v3's "Nyala market drone strike kills 21" was the
+  26 OCTOBER strike (Al Jazeera 27 Oct), NOT 18 Nov -- removed. v3's
+  "Houthi strike on Riyadh airport kills 12" used October's toll;
+  replaced by the true 18 Nov story (Houthis CLAIM fresh strikes,
+  unverified). NZ telco brief reworded to the Wednesday 5.6 Tbps peak;
+  Alcaraz brief updated to the match result.
+- Layout compressed to fit the 4th row: lead art 76->66, mid art
+  56->46, third art 48->42, map 132->102, region bar tightened.
+  No font smaller than v3's; briefs stay 9px, leading 11->10."""
 from PIL import Image, ImageDraw, ImageFont
 import math
 
@@ -91,7 +107,7 @@ def burst(cx, cy, r=7, color=RED):
 
 # ---------------- top line ----------------
 d.text((M, 8), "THE WORLD'S NEWS OF ONE DAY, ON ONE PAGE", font=sans_b(11), fill=RED)
-d.text((W - M, 8), "48 STORIES  \u2022  7 REGIONS  \u2022  9 FIELDS  \u2022  16 DRAWN", font=sans_b(11), fill=INK, anchor="ra")
+d.text((W - M, 8), "57 STORIES  \u2022  7 REGIONS  \u2022  9 FIELDS  \u2022  16 DRAWN", font=sans_b(11), fill=INK, anchor="ra")
 rule(24)
 
 # ---------------- masthead ----------------
@@ -99,26 +115,26 @@ center(28, "Wednesday 18 November 2026", serif_b(52))
 rule(86)
 
 # ---------------- region bar (segments + legend line) ----------------
-REGIONS = [("ASIA", 10, RED), ("EUROPE", 8, BLUE), ("AMERICAS", 13, TEAL),
-           ("MIDDLE EAST", 5, DARKRED), ("GLOBAL", 7, PURPLE), ("AFRICA", 2, GREEN),
+REGIONS = [("ASIA", 11, RED), ("EUROPE", 11, BLUE), ("AMERICAS", 17, TEAL),
+           ("MIDDLE EAST", 7, DARKRED), ("GLOBAL", 7, PURPLE), ("AFRICA", 1, GREEN),
            ("OCEANIA", 3, ORANGE)]
 x = M
-tot = 48
+tot = 57
 for name, n, color in REGIONS:
     w = CW * n / tot
-    d.rectangle([x, 92, x + w - 1, 106], fill=color)
+    d.rectangle([x, 92, x + w - 1, 104], fill=color)
     x += w
 rx = M
 for name, n, color in REGIONS:
-    d.rectangle([rx, 111, rx + 8, 119], fill=color)
-    d.text((rx + 11, 110), f"{name} {n}", font=sans_b(10), fill=INK)
+    d.rectangle([rx, 109, rx + 8, 117], fill=color)
+    d.text((rx + 11, 108), f"{name} {n}", font=sans_b(10), fill=INK)
     rx += 11 + d.textlength(f"{name} {n}", font=sans_b(10)) + 12
-d.text((M, 124), "BY FIELD", font=sans_b(10), fill=RED)
-d.text((M + 62, 124), "Diplomacy 4   War & security 11   Economy & markets 13   Politics & courts 2   Culture & sport 5   Business & tech 4   Labour & society 4   Climate & disasters 3   Science & space 2", font=sans(10), fill=INK)
-rule(138)
+d.text((M, 120), "BY FIELD", font=sans_b(10), fill=RED)
+d.text((M + 62, 120), "Diplomacy 5   War & security 11   Economy & markets 18   Politics & courts 3   Culture & sport 6   Business & tech 5   Labour & society 4   Climate & disasters 3   Science & space 2", font=sans(10), fill=INK)
+rule(132)
 
 # ---------------- UTC timeline ----------------
-d.text((M, 144), "THE DAY IN UTC", font=sans_b(11), fill=RED)
+d.text((M, 138), "THE DAY IN UTC", font=sans_b(11), fill=RED)
 TL = [("Overnight", "Drones over Kuwait, Bahrain"),
       ("07:00", "UK inflation: 3.6%"),
       ("Morning", "Xi greets Trump"),
@@ -131,20 +147,20 @@ tx = M + 118
 tw = (CW - 118) / len(TL)
 for i, (t, label) in enumerate(TL):
     cx = tx + i * tw
-    d.text((cx, 144), t, font=sans_b(10), fill=INK)
-    yy = 158
+    d.text((cx, 138), t, font=sans_b(10), fill=INK)
+    yy = 152
     for line in wrap(label, sans(9), tw - 6):
         d.text((cx, yy), line, font=sans(9), fill=INK)
         yy += 11
-        if yy > 169:
+        if yy > 163:
             break
     if i:
-        vline(cx - 4, 144, 178)
-rule(182)
+        vline(cx - 4, 138, 172)
+rule(176)
 
 # ---------------- leads: 4 columns ----------------
 LEADW = (CW - 3 * 12) // 4   # 232
-LY = 186
+LY = 180
 
 def flag_us(x, y, w=56, h=35):
     for i in range(7):
@@ -239,19 +255,19 @@ LEADS = [
 ]
 for i, (kick, head, summ, t, drawfn) in enumerate(LEADS):
     x = M + i * (LEADW + 12)
-    drawfn(x, LY, x + LEADW, LY + 76)
-    y = LY + 82
+    drawfn(x, LY, x + LEADW, LY + 66)
+    y = LY + 72
     kicker(x, y, kick); y += 14
     y = headline(x, y, head, 19, LEADW, 22)
     y = body(x, y + 2, summ, 11, LEADW, 14)
-    tag(x, LY + 188, t)
+    tag(x, LY + 176, t)
     if i < 3:
-        vline(x + LEADW + 6, LY, LY + 200)
-rule(LY + 206)
+        vline(x + LEADW + 6, LY, LY + 188)
+rule(LY + 194)
 
 # ---------------- mid row: 6 columns ----------------
 MIDW = (CW - 5 * 10) // 6   # 152
-MY = LY + 214
+MY = LY + 202
 
 def draw_gaza(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=LAND, outline=INK, width=1)
@@ -284,9 +300,9 @@ def draw_fed(x0, y0, x1, y1):
 
 def draw_factory(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=(230, 225, 215), outline=INK, width=1)
-    d.rectangle([x0 + 10, y1 - 26, x0 + 90, y1 - 6], fill=(120, 110, 100))
-    d.rectangle([x0 + 16, y1 - 44, x0 + 24, y1 - 26], fill=(120, 110, 100))
-    d.rectangle([x0 + 30, y1 - 52, x0 + 38, y1 - 26], fill=(120, 110, 100))
+    d.rectangle([x0 + 10, y1 - 20, x0 + 90, y1 - 4], fill=(120, 110, 100))
+    d.rectangle([x0 + 16, y1 - 34, x0 + 24, y1 - 20], fill=(120, 110, 100))
+    d.rectangle([x0 + 30, y1 - 40, x0 + 38, y1 - 20], fill=(120, 110, 100))
     for wx in range(x0 + 96, x1 - 12, 14):
         d.ellipse([wx, y1 - 22, wx + 7, y1 - 15], fill=(40, 60, 90))
     d.text((x0 + 96, y0 + 4), "30,000", font=serif_b(16), fill=RED)
@@ -333,18 +349,18 @@ MIDS = [
 ]
 for i, (kick, head, summ, t, drawfn) in enumerate(MIDS):
     x = M + i * (MIDW + 10)
-    drawfn(x, MY, x + MIDW, MY + 56)
-    y = MY + 62
+    drawfn(x, MY, x + MIDW, MY + 46)
+    y = MY + 52
     kicker(x, y, kick); y += 13
     y = headline(x, y, head, 14, MIDW, 17)
     y = body(x, y + 1, summ, 10, MIDW, 13)
-    tag(x, MY + 158, t)
+    tag(x, MY + 146, t)
     if i < 5:
-        vline(x + MIDW + 5, MY, MY + 170)
-rule(MY + 180)
+        vline(x + MIDW + 5, MY, MY + 158)
+rule(MY + 168)
 
 # ---------------- third row: 6 columns ----------------
-TY = MY + 188
+TY = MY + 176
 
 def draw_peltola(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=(255, 255, 255), outline=INK, width=1)
@@ -355,8 +371,8 @@ def draw_peltola(x0, y0, x1, y1):
 def draw_akvan(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=SKY, outline=INK, width=1)
     d.polygon([(x0 + 30, y0 + 30), (x0 + 90, y0 + 20), (x0 + 120, y0 + 44), (x0 + 60, y1 - 6), (x0 + 20, y1 - 10)], fill=LAND)
-    cx, cy = x0 + 78, y0 + 30
-    for r in (22, 15, 8):
+    cx, cy = x0 + 78, y0 + 22
+    for r in (15, 10, 5):
         d.arc([cx - r, cy - r, cx + r, cy + r], 20, 300, fill=(255, 255, 255), width=2)
     d.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=RED)
     d.text((x0 + 4, y0 + 2), "BAY OF BENGAL", font=sans_b(8), fill=(70, 90, 120))
@@ -366,18 +382,17 @@ def draw_gta(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=(16, 10, 30), outline=INK, width=1)
     d.text((x0 + 6, y0 + 2), "GTA VI", font=serif_b(20), fill=(255, 80, 200))
     d.text((x0 + 6, y0 + 24), "00:00 THU", font=sans_b(11), fill=(120, 255, 220))
-    d.text((x0 + 6, y0 + 37), "NEW ZEALAND FIRST", font=sans_b(8), fill=(255, 255, 255))
 
 def draw_aria(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=(60, 20, 80), outline=INK, width=1)
-    d.ellipse([x0 + 56, y0 + 8, x0 + 96, y0 + 34], fill=(255, 214, 120), outline=(255, 255, 255), width=1)
-    d.rectangle([x0 + 70, y0 + 34, x0 + 82, y0 + 46], fill=(255, 214, 120))
+    d.ellipse([x0 + 56, y0 + 6, x0 + 96, y0 + 28], fill=(255, 214, 120), outline=(255, 255, 255), width=1)
+    d.rectangle([x0 + 70, y0 + 28, x0 + 82, y0 + 38], fill=(255, 214, 120))
     d.text((x0 + 6, y0 + 6), "7", font=serif_b(24), fill=(255, 255, 255))
     d.text((x0 + 6, y1 - 13), "ARIA WINS", font=sans_b(9), fill=(255, 255, 255))
 
 def draw_uk(x0, y0, x1, y1):
     d.rectangle([x0, y0, x1, y1], fill=(255, 255, 255), outline=INK, width=1)
-    for i, h in enumerate((14, 20, 17, 26, 34)):
+    for i, h in enumerate((10, 15, 13, 19, 26)):
         d.rectangle([x0 + 10 + i * 26, y1 - 8 - h, x0 + 10 + i * 26 + 18, y1 - 8], fill=MIDBLUE if i < 4 else RED)
     d.text((x0 + 6, y0 + 2), "3.6%", font=serif_b(15), fill=RED)
 
@@ -393,7 +408,7 @@ THIRDS = [
     ("11  AMERICAS \u2014 US POLITICS", "Peltola wins Alaska; Dems take Senate 56\u201344",
      "Democrat beats Sullivan in the last race to be called.",
      "CONFIRMED: AP", draw_peltola),
-    ("12  ASIA \u2014 WEATHER", "Cyclone Akvan turns towards India\u2019s Odisha coast",
+    ("12  ASIA \u2014 WEATHER", "Cyclone Akvan nears Odisha coast",
      "Nearly 50,000 moved to safety; landfall due Friday.",
      "FORECAST: PTI", draw_akvan),
     ("13  GLOBAL \u2014 GAMES", "GTA VI\u2019s midnight launch begins in New Zealand",
@@ -411,42 +426,70 @@ THIRDS = [
 ]
 for i, (kick, head, summ, t, drawfn) in enumerate(THIRDS):
     x = M + i * (MIDW + 10)
-    drawfn(x, TY, x + MIDW, TY + 48)
-    y = TY + 54
+    drawfn(x, TY, x + MIDW, TY + 42)
+    y = TY + 48
     kicker(x, y, kick); y += 13
     y = headline(x, y, head, 13, MIDW, 16)
     y = body(x, y + 1, summ, 10, MIDW, 13)
-    tag(x, TY + 140, t)
+    tag(x, TY + 128, t)
     if i < 5:
-        vline(x + MIDW + 5, TY, TY + 152)
-rule(TY + 158)
+        vline(x + MIDW + 5, TY, TY + 140)
+rule(TY + 146)
+
+# ---------------- fourth row: 4 columns, text only ----------------
+FY = TY + 154
+
+FOURTHS = [
+    ("17  MIDDLE EAST \u2014 WAR", "Houthis claim Riyadh strikes",
+     "Houthis claim a missile salvo; unverified.",
+     "CLAIM: HOUTHIS"),
+    ("18  EUROPE \u2014 ECONOMY", "ECB top jobs split three ways",
+     "De Cos leads for president; Berlin agrees.",
+     "SOURCES: REUTERS, FT"),
+    ("19  AMERICAS \u2014 CLIMATE", "El Ni\u00f1o fires persist in Amazon",
+     "Fires still burn as the dry season bites.",
+     "SOURCES: NASA, INPE"),
+    ("20  GLOBAL \u2014 SPACE", "Dragon undocking stood down",
+     "Crew's cargo return waits for a calmer sea.",
+     "CONFIRMED: NASA"),
+]
+for i, (kick, head, summ, t) in enumerate(FOURTHS):
+    x = M + i * (LEADW + 12)
+    kicker(x, FY, kick)
+    headline(x, FY + 13, head, 13, LEADW, 16)
+    body(x, FY + 29, summ, 10, LEADW, 13)
+    tag(x, FY + 44, t)
+    if i < 3:
+        vline(x + LEADW + 6, FY, FY + 56)
+rule(FY + 58)
 
 # ---------------- map + briefs ----------------
-BY = TY + 160
+BY = FY + 66
 d.text((M, BY), "WHERE IT HAPPENED", font=sans_b(11), fill=RED)
 d.text((M + 316, BY), "ALSO ON WEDNESDAY 18 NOVEMBER", font=sans_b(11), fill=RED)
 rule(BY + 16)
 
-MAPX, MAPY, MAPW, MAPH = M, BY + 22, 300, 132
+MAPX, MAPY, MAPW, MAPH = M, BY + 22, 300, 102
 d.rectangle([MAPX, MAPY, MAPX + MAPW, MAPY + MAPH], fill=(210, 228, 240), outline=INK, width=1)
-# simplified continents
-d.polygon([(MAPX + 18, MAPY + 22), (MAPX + 90, MAPY + 14), (MAPX + 108, MAPY + 44), (MAPX + 70, MAPY + 66), (MAPX + 30, MAPY + 58)], fill=LAND)  # N America
-d.polygon([(MAPX + 78, MAPY + 74), (MAPX + 108, MAPY + 72), (MAPX + 104, MAPY + 118), (MAPX + 84, MAPY + 126)], fill=LAND)  # S America
-d.polygon([(MAPX + 138, MAPY + 20), (MAPX + 172, MAPY + 16), (MAPX + 178, MAPY + 40), (MAPX + 150, MAPY + 46)], fill=LAND)  # Europe
-d.polygon([(MAPX + 140, MAPY + 52), (MAPX + 176, MAPY + 50), (MAPX + 182, MAPY + 96), (MAPX + 160, MAPY + 112), (MAPX + 146, MAPY + 82)], fill=LAND)  # Africa
-d.polygon([(MAPX + 182, MAPY + 14), (MAPX + 268, MAPY + 10), (MAPX + 282, MAPY + 52), (MAPX + 240, MAPY + 66), (MAPX + 196, MAPY + 50)], fill=LAND)  # Asia
-d.polygon([(MAPX + 258, MAPY + 112), (MAPX + 288, MAPY + 110), (MAPX + 290, MAPY + 128), (MAPX + 264, MAPY + 130)], fill=LAND)  # Oceania
-PINS = {1: (200, 58), 2: (258, 44), 3: (168, 30), 4: (288, 22), 5: (184, 64),
-        6: (168, 76), 7: (52, 44), 8: (236, 56), 9: (62, 50), 10: (44, 52),
-        11: (28, 30), 12: (246, 64), 13: (292, 118), 14: (280, 122), 15: (152, 26), 16: (268, 62)}
+# simplified continents (y scaled 102/132 from v3)
+d.polygon([(MAPX + 18, MAPY + 17), (MAPX + 90, MAPY + 11), (MAPX + 108, MAPY + 34), (MAPX + 70, MAPY + 51), (MAPX + 30, MAPY + 45)], fill=LAND)  # N America
+d.polygon([(MAPX + 78, MAPY + 57), (MAPX + 108, MAPY + 56), (MAPX + 104, MAPY + 91), (MAPX + 84, MAPY + 97)], fill=LAND)  # S America
+d.polygon([(MAPX + 138, MAPY + 15), (MAPX + 172, MAPY + 12), (MAPX + 178, MAPY + 31), (MAPX + 150, MAPY + 36)], fill=LAND)  # Europe
+d.polygon([(MAPX + 140, MAPY + 40), (MAPX + 176, MAPY + 39), (MAPX + 182, MAPY + 74), (MAPX + 160, MAPY + 87), (MAPX + 146, MAPY + 63)], fill=LAND)  # Africa
+d.polygon([(MAPX + 182, MAPY + 11), (MAPX + 268, MAPY + 8), (MAPX + 282, MAPY + 40), (MAPX + 240, MAPY + 56), (MAPX + 210, MAPY + 54), (MAPX + 196, MAPY + 39)], fill=LAND)  # Asia
+d.polygon([(MAPX + 258, MAPY + 87), (MAPX + 288, MAPY + 85), (MAPX + 290, MAPY + 99), (MAPX + 264, MAPY + 100)], fill=LAND)  # Oceania
+PINS = {1: (200, 45), 2: (258, 34), 3: (168, 23), 4: (288, 17), 5: (184, 49),
+        6: (168, 59), 7: (52, 34), 8: (236, 43), 9: (66, 42), 10: (40, 42),
+        11: (28, 23), 12: (250, 52), 13: (292, 91), 14: (276, 97), 15: (152, 20), 16: (268, 48),
+        17: (214, 51), 18: (150, 33), 19: (95, 85), 20: (290, 40)}
 for n, (px, py) in PINS.items():
     d.ellipse([MAPX + px - 6, MAPY + py - 6, MAPX + px + 6, MAPY + py + 6], fill=RED, outline=(255, 255, 255), width=1)
     d.text((MAPX + px, MAPY + py - 1), str(n), font=sans_b(7), fill=(255, 255, 255), anchor="mm")
-d.text((MAPX, MAPY + MAPH + 4), "Numbered pin = stories 1\u201316  \u2022  dot = a brief from the list",
+d.text((MAPX, MAPY + MAPH + 4), "Numbered pin = stories 1\u201320  \u2022  dot = a brief from the list",
        font=sans(9), fill=INK)
-d.text((MAPX, MAPY + MAPH + 16), "HOW SURE \u2014 CONFIRMED: on the record. CLAIM: one side\u2019s account,",
+d.text((MAPX, MAPY + MAPH + 14), "HOW SURE \u2014 CONFIRMED: on the record. CLAIM: one side\u2019s account,",
        font=sans_b(9), fill=INK)
-d.text((MAPX, MAPY + MAPH + 27), "not independently verified. SOURCES: monitors, via a news agency.",
+d.text((MAPX, MAPY + MAPH + 25), "not independently verified. SOURCES: monitors, via a news agency.",
        font=sans(9), fill=INK)
 
 BRIEFS = [
@@ -454,7 +497,6 @@ BRIEFS = [
     ("Brent settles at $91.95 a barrel", PURPLE),
     ("Nvidia revenue doubles to $115.8bn", TEAL),
     ("Nasdaq +0.42% as the Dow falls 561", TEAL),
-    ("El Ni\u00f1o drought, fires persist in Amazon", TEAL),
     ("Gopalganj: police station burned in unrest", RED),
     ("Hasina unrest: troops out in 28 districts", RED),
     ("Dhoni retires from the IPL", RED),
@@ -469,37 +511,43 @@ BRIEFS = [
     ("EU: four states opt out of the Ukraine loan", BLUE),
     ("Merz warns he will block the EU budget", BLUE),
     ("Odesa: strikes hit a UNESCO historic centre", BLUE),
-    ("Gaza: 5,200 flee as tanks roll onto main road", DARKRED),
+    ("Gaza: 5,200 flee as tanks advance", DARKRED),
     ("Gaza: three killed in separate drone strikes", DARKRED),
     ("Wage board meets 23 Nov; new pay due in Dec", RED),
     ("About 30 factories shut in Savar-Ashulia", RED),
     ("Akvan is the third storm in a month", RED),
     ("Ecca Vandal wins four ARIAs; Owusu shut out", ORANGE),
-    ("Alcaraz meets Medvedev at the ATP Finals", BLUE),
-    ("Nyala market drone strike kills 21", GREEN),
-    ("Houthi strike on Riyadh airport kills 12", DARKRED),
-    ("NZ telco braces for 35 PB of GTA downloads", ORANGE),
+    ("Alcaraz beats Medvedev at the ATP Finals", BLUE),
+    ("NZ network peaks at 5.6 Tbps on GTA eve", ORANGE),
     ("France: students blockade schools in strikes", BLUE),
-    ("Dragon undocking stood down by weather", PURPLE),
-    ("ECB top jobs split: Spain, Germany, France", BLUE),
+    ("Gulf leaders urged Trump not to attack Iran", DARKRED),
+    ("Spy chief lobbied for joint Iran strikes", DARKRED),
+    ("US weighs forcing Chinese AI disclosure", TEAL),
+    ("India puts 162.5% duty on bulk Scotch", RED),
+    ("TJX lifts annual forecast on holiday demand", TEAL),
+    ("STMicro aims to double STM32 revenue", BLUE),
+    ("Fed minutes: some wanted a bigger hike", TEAL),
+    ("Lowe's forecasts muted annual profit", TEAL),
+    ("Norris: Russell most likely James Bond", BLUE),
+    ("Orlen, QatarEnergy in talks on new LNG deal", BLUE),
 ]
 BX0 = M + 316
 BCOLW = (W - M - BX0 - 16) // 3
 for col in range(3):
     x = BX0 + col * (BCOLW + 8)
     y = BY + 24
-    for j in range(11):
-        idx = col * 11 + j
+    for j in range(13):
+        idx = col * 13 + j
         if idx >= len(BRIEFS):
             break
         text, color = BRIEFS[idx]
         d.ellipse([x, y + 2, x + 7, y + 9], fill=color)
         d.text((x + 11, y), text, font=sans(9), fill=INK)
-        y += 11
-rule(BY + 190)
+        y += 10
+rule(BY + 164)
 
 # ---------------- date check ----------------
-DY = BY + 198
+DY = BY + 172
 d.text((M, DY), "DATE CHECK", font=sans_b(11), fill=(255, 255, 255))
 d.rectangle([M, DY, M + 78, DY + 14], fill=RED)
 d.text((M + 4, DY + 1), "DATE CHECK", font=sans_b(10), fill=(255, 255, 255))
@@ -513,9 +561,9 @@ for line in wrap(dc, sans(10), CW - 88):
     y += 13
 
 # ---------------- footer ----------------
-rule(DY + 44)
-center(DY + 50, "Every story here happened or was first reported on Wednesday 18 November 2026; nothing older is shown as the day\u2019s news.", serif_b(12))
-center(DY + 68, "Sources: Reuters, AP, AFP, Al Jazeera, BBC, CNBC, NASA, ONS, ABC, ATP.  Original drawings.", sans(10), LIGHT)
+rule(DY + 40)
+center(DY + 46, "Every story here happened or was first reported on Wednesday 18 November 2026; nothing older is shown as the day\u2019s news.", serif_b(12))
+center(DY + 64, "Sources: Reuters, AP, AFP, Al Jazeera, BBC, CNBC, NASA, ONS, ABC, ATP, FT, INPE.  Original drawings.", sans(10), LIGHT)
 
-img.save("/home/hatch/workspace/makefun/work-news-image-v3/entry.png", optimize=True)
+img.save("/home/hatch/workspace/makefun/work-news-image-v4/entry.png", optimize=True)
 print("saved", img.size)
