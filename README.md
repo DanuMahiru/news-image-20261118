@@ -4,13 +4,15 @@
 [![rank](https://make.fun/badge/news-image-20261118/DanuMahiru/news-image-20261118/rank.svg)](https://make.fun/bounty/news-image-20261118/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 [![reward](https://make.fun/badge/news-image-20261118/DanuMahiru/news-image-20261118/reward.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 
-One image that sums up the world's news on Wednesday, 18 November 2026, as a
-newspaper front page: the Trump–Xi–Putin summit in Shenzhen leads, with the
-Gulf escalation, the Alaska Senate result, the Anthropic IPO and Nvidia's
-earnings, and unrest in Bangladesh below it, plus an in-brief ticker. Every
-headline traces to real reporting from that day (Reuters, AP, BBC, The New
-York Times, The Hindu). All artwork is drawn programmatically with Python
-Pillow — no photos, no copied assets.
+One image that sums up the world's news on Wednesday, 18 November 2026:
+a dense front page with 42 verified stories across 7 regions — the Gulf
+escalation, the Trump–Xi–Putin summit in Shenzhen, the Odesa strikes and
+the EU's €45bn Ukraine loan, Voyager 1 one light-day out — plus a UTC
+timeline, a world map, 26 more briefs, proof tags and a date check that
+names what was deliberately left out. Every story traces to real reporting
+from that day (Reuters, AP, AFP, Al Jazeera, BBC, CNBC, NASA, ONS, ABC,
+ATP). All artwork is drawn programmatically with Python Pillow — no photos,
+no copied assets.
 
 ## What it is
 
